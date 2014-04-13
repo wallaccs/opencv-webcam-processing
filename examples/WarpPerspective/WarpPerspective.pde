@@ -13,10 +13,12 @@ PImage src;
 PImage card;
 int cardWidth = 250;
 int cardHeight = 350;
+int pick;
 
 Contour contour;
 
 void setup() {
+  
   src = loadImage("cards.png");
   size(src.width + cardWidth, src.height);
   opencv = new OpenCV(this, src);
@@ -24,11 +26,19 @@ void setup() {
   opencv.blur(1);
   opencv.threshold(120);
 
-  contour = opencv.findContours(false, true).get(0).getPolygonApproximation();
+  pickCard(0);
 
+}
+
+
+void pickCard(int idx) {
+  
+  contour = opencv.findContours(false, true).get(idx).getPolygonApproximation();
   card = createImage(cardWidth, cardHeight, ARGB);  
   opencv.toPImage(warpPerspective(contour.getPoints(), cardWidth, cardHeight), card);
+  
 }
+
 
 Mat getPerspectiveTransformation(ArrayList<PVector> inputPoints, int w, int h) {
   Point[] canonicalPoints = new Point[4];
@@ -59,7 +69,7 @@ Mat warpPerspective(ArrayList<PVector> inputPoints, int w, int h) {
 void draw() {
   image(src, 0, 0);
   noFill(); 
-  stroke(0, 255, 0); 
+  stroke(255, 0, 0); 
   strokeWeight(4);
   contour.draw();
   fill(255, 0);
@@ -72,5 +82,11 @@ void draw() {
   translate(src.width, 0);
   image(card, 0, 0);
   popMatrix();
+}
+
+
+void keyPressed() {
+  pick = (pick + 1) % 4;
+  pickCard(pick);
 }
 
