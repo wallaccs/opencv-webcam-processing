@@ -14,8 +14,7 @@ int zoom = 3;
 
 void setup() {
 
-  // actual size, is a result of input resolution and zoom factor
-  size(w * zoom, h * zoom);
+  size(960,720);
 
   // capture camera with input resolution
   cam = new Capture(this, w, h);
@@ -26,9 +25,6 @@ void setup() {
 
   // setup for facial recognition
   opencv.loadCascade(OpenCV.CASCADE_FRONTALFACE);  
-
-  // limit frameRate
-  //frameRate(30);
 }
 
 
@@ -65,4 +61,3 @@ void draw() {
 void captureEvent(Capture c) {
   c.read();
 }
-
